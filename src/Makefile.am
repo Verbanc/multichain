@@ -356,9 +356,9 @@ nodist_libbitcoin_util_a_SOURCES = $(srcdir)/obj/build.h
   $(LIBMEMENV) \
   $(LIBSECP256K1)
 
-if ENABLE_ZMQ
-bitcoind_LDADD += $(LIBBITCOIN_ZMQ) $(ZMQ_LIBS)
-endif
+#if ENABLE_ZMQ
+#bitcoind_LDADD += $(LIBBITCOIN_ZMQ) $(ZMQ_LIBS)
+#endif
 
 #if ENABLE_WALLET
 #bitcoind_LDADD += libbitcoin_wallet.a
@@ -422,6 +422,7 @@ multichaind_LDADD = \
   $(LIBBITCOIN_COMMON) \
   $(LIBBITCOIN_UNIVALUE) \
   $(LIBBITCOIN_WALLET) \
+  $(LIBBITCOIN_ZMQ) \
   $(LIBBITCOIN_MULTICHAIN) \
   $(LIBBITCOIN_UTIL) \
   $(LIBBITCOIN_CRYPTO) \
