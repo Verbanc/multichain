@@ -1971,7 +1971,7 @@ bool AppInit2(boost::thread_group& threadGroup,int OutputPipe)
     }
 
 #if ENABLE_ZMQ
-        pzmqNotificationInterface = CZMQNotificationInterface::Create();
+        pzmqNotificationInterface = CZMQNotificationInterface::CreateWithArguments(mapArgs);
 
     if (pzmqNotificationInterface) {
         RegisterValidationInterface(pzmqNotificationInterface);
