@@ -235,6 +235,8 @@ namespace {
 namespace {
 
 struct CMainSignals {
+    boost::signals2::signal<void (const CBlockIndex *)> UpdatedBlockTip;
+    boost::signals2::signal<void (const CTransaction &)> TransactionAddedToMempool;
     /** Notifies listeners of updated transaction data (transaction, and optionally the block it is found in. */
     boost::signals2::signal<void (const CTransaction &, const CBlock *)> SyncTransaction;
     /** Notifies listeners of an erased transaction (currently disabled, requires transaction replacement). */
@@ -254,6 +256,8 @@ struct CMainSignals {
 } // anon namespace
 
 void RegisterValidationInterface(CValidationInterface* pwalletIn) {
+    g_signals.UpdatedBlockTip.connect(boost::bind(&CValidationInterface::UpdatedBlockTip, pwalletIn, _1, _2, _3));
+    g_signals.TransactionAddedToMempool.connect(boost::bind(&CValidationInterface::TransactionAddedToMempool, pwalletIn, _1));
     g_signals.SyncTransaction.connect(boost::bind(&CValidationInterface::SyncTransaction, pwalletIn, _1, _2));
     g_signals.EraseTransaction.connect(boost::bind(&CValidationInterface::EraseFromWallet, pwalletIn, _1));
     g_signals.UpdatedTransaction.connect(boost::bind(&CValidationInterface::UpdatedTransaction, pwalletIn, _1));
@@ -271,6 +275,8 @@ void UnregisterValidationInterface(CValidationInterface* pwalletIn) {
     g_signals.UpdatedTransaction.disconnect(boost::bind(&CValidationInterface::UpdatedTransaction, pwalletIn, _1));
     g_signals.EraseTransaction.disconnect(boost::bind(&CValidationInterface::EraseFromWallet, pwalletIn, _1));
     g_signals.SyncTransaction.disconnect(boost::bind(&CValidationInterface::SyncTransaction, pwalletIn, _1, _2));
+    g_signals.TransactionAddedToMempool.disconnect(boost::bind(&CValidationInterface::TransactionAddedToMempool, pwalletIn, _1));
+    g_signals.UpdatedBlockTip.disconnect(boost::bind(&CValidationInterface::UpdatedBlockTip, pwalletIn, _1, _2, _3));
 }
 
 void UnregisterAllValidationInterfaces() {
@@ -1582,6 +1588,8 @@ bool AcceptToMemoryPool(CTxMemPool& pool, CValidationState &state, const CTransa
             SyncWithWallets(tx, NULL);
         }
     }
+
+    g_signals.TransactionAddedToMempool(tx);
 
     return true;
 }
@@ -3406,6 +3414,8 @@ bool ActivateBestChain(CValidationState &state, CBlock *pblock) {
                     if (chainActive.Height() > (pnode->nStartingHeight != -1 ? pnode->nStartingHeight - 2000 : nBlockEstimate))
                         pnode->PushInventory(CInv(MSG_BLOCK, hashNewTip));
                 }
+
+            g_signals.UpdatedBlockTip(pindexNewTip);
             // Notify external listeners about the new tip.
             uiInterface.NotifyBlockTip(hashNewTip);
         }
