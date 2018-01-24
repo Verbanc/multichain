@@ -71,7 +71,7 @@ mc_WalletTxs* pwalletTxsMain = NULL;
 bool fFeeEstimatesInitialized = false;
 
 #if ENABLE_ZMQ
-static CZMQNotificationInterface* pzmqNotificationInterface = nullptr;
+static CZMQNotificationInterface* pzmqNotificationInterface = NULL;
 #endif
 
 #ifdef WIN32
@@ -217,7 +217,7 @@ void Shutdown()
     if (pzmqNotificationInterface) {
         UnregisterValidationInterface(pzmqNotificationInterface);
         delete pzmqNotificationInterface;
-        pzmqNotificationInterface = nullptr;
+        pzmqNotificationInterface = NULL;
     }
 #endif
 
@@ -415,11 +415,11 @@ std::string HelpMessage(HelpMessageMode mode)                                   
 #endif
 
 #if ENABLE_ZMQ
-    strUsage += HelpMessageGroup(_("ZeroMQ notification options:"));
-    strUsage += HelpMessageOpt("-zmqpubhashblock=<address>", _("Enable publish hash block in <address>"));
-    strUsage += HelpMessageOpt("-zmqpubhashtx=<address>", _("Enable publish hash transaction in <address>"));
-    strUsage += HelpMessageOpt("-zmqpubrawblock=<address>", _("Enable publish raw block in <address>"));
-    strUsage += HelpMessageOpt("-zmqpubrawtx=<address>", _("Enable publish raw transaction in <address>"));
+    strUsage += "\n" +_("ZeroMQ notification options:") + "\n";
+    strUsage += "  -zmqpubhashblock=<address>   " + _("Enable publish hash block in <address>") + "\n";
+    strUsage += "  -zmqpubhashtx=<address>      " + _("Enable publish hash transaction in <address>") + "\n";
+    strUsage += "  -zmqpubrawblock=<address>    " + _("Enable publish raw block in <address>") + "\n";
+    strUsage += "  -zmqpubrawtx=<address>       " + _("Enable publish raw transaction in <address>") + "\n";
 #endif
 
     strUsage += "\n" + _("Debugging/Testing options:") + "\n";

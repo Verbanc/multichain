@@ -24,7 +24,7 @@ protected:
     void Shutdown();
 
     // CValidationInterface
-    void TransactionAddedToMempool(const CTransaction & tx) override;
+    void TransactionAddedToMempool(const CTransaction & tx);
     void SyncTransaction(const CTransaction &tx, const CBlock *pblock);
     void UpdatedBlockTip(const CBlockIndex *pindex);
 
