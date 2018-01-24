@@ -63,7 +63,16 @@ using namespace std;
 CWallet* pwalletMain = NULL;
 mc_WalletTxs* pwalletTxsMain = NULL;
 #endif
+
+#if ENABLE_ZMQ
+#include <zmq/zmqnotificationinterface.h>
+#endif
+
 bool fFeeEstimatesInitialized = false;
+
+#if ENABLE_ZMQ
+static CZMQNotificationInterface* pzmqNotificationInterface = nullptr;
+#endif
 
 #ifdef WIN32
 // Win32 LevelDB doesn't use filedescriptors, and the ones used for
@@ -203,6 +212,15 @@ void Shutdown()
     if (pwalletMain)
         bitdb.Flush(true);
 #endif
+
+#if ENABLE_ZMQ
+    if (pzmqNotificationInterface) {
+        UnregisterValidationInterface(pzmqNotificationInterface);
+        delete pzmqNotificationInterface;
+        pzmqNotificationInterface = nullptr;
+    }
+#endif
+
 #ifndef WIN32
     boost::filesystem::remove(GetPidFile());
 #endif
@@ -394,6 +412,14 @@ std::string HelpMessage(HelpMessageMode mode)                                   
 /* MCHN END */    
     strUsage += "  -zapwallettxes=<mode>  " + _("Delete all wallet transactions and only recover those parts of the blockchain through -rescan on startup") + "\n";
     strUsage += "                         " + _("(1 = keep tx meta data e.g. account owner and payment request information, 2 = drop tx meta data)") + "\n";
+#endif
+
+#if ENABLE_ZMQ
+    strUsage += HelpMessageGroup(_("ZeroMQ notification options:"));
+    strUsage += HelpMessageOpt("-zmqpubhashblock=<address>", _("Enable publish hash block in <address>"));
+    strUsage += HelpMessageOpt("-zmqpubhashtx=<address>", _("Enable publish hash transaction in <address>"));
+    strUsage += HelpMessageOpt("-zmqpubrawblock=<address>", _("Enable publish raw block in <address>"));
+    strUsage += HelpMessageOpt("-zmqpubrawtx=<address>", _("Enable publish raw transaction in <address>"));
 #endif
 
     strUsage += "\n" + _("Debugging/Testing options:") + "\n";
@@ -1943,6 +1969,14 @@ bool AppInit2(boost::thread_group& threadGroup,int OutputPipe)
             AddLocal(CService(s_ip, port, fNameLookup), LOCAL_MANUAL);
         }
     }
+
+#if ENABLE_ZMQ
+        pzmqNotificationInterface = CZMQNotificationInterface::Create();
+
+    if (pzmqNotificationInterface) {
+        RegisterValidationInterface(pzmqNotificationInterface);
+    }
+#endif
 
     BOOST_FOREACH(string strDest, mapMultiArgs["-seednode"])
         AddOneShot(strDest);
