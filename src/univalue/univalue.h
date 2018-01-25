@@ -56,22 +56,12 @@ public:
 
     enum VType getType() const { return typ; }
     std::string getValStr() const { return val; }
-    std::string get_str() const {
-        if (typ != VSTR)
-            throw std::runtime_error("JSON value is not a string as expected");
-        return getValStr();
-    };
     bool empty() const { return (values.size() == 0); }
 
     size_t count() const { return values.size(); }
     size_t size() const { return values.size(); }
 
     bool getBool() const { return isTrue(); }
-    bool get_bool() const {
-        if (typ != VBOOL)
-            throw std::runtime_error("JSON value is not a boolean as expected");
-        return getBool();
-    }
     bool checkObject(const std::map<std::string,UniValue::VType>& memberTypes);
     const UniValue& operator[](const std::string& key) const;
     const UniValue& operator[](unsigned int index) const;
