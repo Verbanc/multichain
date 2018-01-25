@@ -69,9 +69,9 @@ double GetDifficulty(const CBlockIndex* blockindex)
     return dDiff;
 }
 
-UniValue blockheaderToJSON(const CBlockIndex* blockindex)
+Object blockheaderToJSON(const CBlockIndex* blockindex)
 {
-    UniValue result(UniValue::VOBJ);
+    Object result;
     result.push_back(Pair("hash", blockindex->GetBlockHash().GetHex()));
     int confirmations = -1;
     // Only report confirmations if the block is on the main chain
@@ -310,7 +310,7 @@ Value getblockhash(const Array& params, bool fHelp)
     return pblockindex->GetBlockHash().GetHex();
 }
 
-UniValue getblockheader(const UniValue& params, bool fHelp)
+Value getblockheader(const Array& params, bool fHelp)
 {
     if (fHelp || params.size() < 1 || params.size() > 2)
         throw runtime_error(
