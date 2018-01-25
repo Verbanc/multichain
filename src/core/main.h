@@ -565,6 +565,8 @@ struct CBlockTemplate
 
 class CValidationInterface {
 protected:
+    virtual void UpdatedBlockTip(const CBlockIndex *) {}
+    virtual void TransactionAddedToMempool(const CTransaction &ptxn) {}
     virtual void SyncTransaction(const CTransaction &tx, const CBlock *pblock) {};
     virtual void EraseFromWallet(const uint256 &hash) {};
     virtual void SetBestChain(const CBlockLocator &locator) {};
