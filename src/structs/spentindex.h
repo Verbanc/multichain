@@ -15,8 +15,8 @@ struct CSpentIndexKey {
 
     ADD_SERIALIZE_METHODS;
 
-    template <typename Stream, typename Operation>
-    inline void SerializationOp(Stream& s, Operation ser_action) {
+    template<typename Stream, typename Operation>
+    inline void SerializationOp(Stream &s, Operation ser_action, int nType, int nVersion) {
         READWRITE(txid);
         READWRITE(outputIndex);
     }
@@ -47,8 +47,8 @@ struct CSpentIndexValue {
 
     ADD_SERIALIZE_METHODS;
 
-    template <typename Stream, typename Operation>
-    inline void SerializationOp(Stream& s, Operation ser_action) {
+    template<typename Stream, typename Operation>
+    inline void SerializationOp(Stream &s, Operation ser_action, int nType, int nVersion) {
         READWRITE(txid);
         READWRITE(inputIndex);
         READWRITE(blockHeight);
@@ -84,9 +84,8 @@ struct CSpentIndexValue {
     }
 };
 
-struct CSpentIndexKeyCompare
-{
-    bool operator()(const CSpentIndexKey& a, const CSpentIndexKey& b) const {
+struct CSpentIndexKeyCompare {
+    bool operator()(const CSpentIndexKey &a, const CSpentIndexKey &b) const {
         if (a.txid == b.txid) {
             return a.outputIndex < b.outputIndex;
         } else {

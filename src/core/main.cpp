@@ -99,6 +99,9 @@ bool fReindex = false;
 bool fAddressIndex = false;
 bool fTimestampIndex = false;
 bool fSpentIndex = false;
+bool fHavePruned = false;
+bool fPruneMode = false;
+uint64_t nPruneTarget = 0;
 bool fTxIndex = false;
 bool fIsBareMultisigStd = true;
 unsigned int nCoinCacheSize = 5000;
@@ -4976,6 +4979,12 @@ bool AbortNode(const std::string &strMessage, const std::string &userMessage) {
         "", CClientUIInterface::MSG_ERROR);
     StartShutdown();
     return false;
+}
+
+bool AbortNode(CValidationState& state, const std::string& strMessage, const std::string& userMessage)
+{
+    AbortNode(strMessage, userMessage);
+    return state.Error(strMessage);
 }
 
 bool CheckDiskSpace(uint64_t nAdditionalBytes)
