@@ -204,6 +204,19 @@ public:
         return ret;
     }
 
+    bool IsNull() const
+    {
+        for (int i = 0; i < WIDTH; i++)
+            if (pn[i] != 0)
+                return false;
+        return true;
+    }
+
+    void SetNull()
+    {
+        memset(pn, 0, sizeof(pn));
+    }
+
     int CompareTo(const base_uint& b) const;
     bool EqualTo(uint64_t b) const;
 
