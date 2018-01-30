@@ -78,6 +78,9 @@ endif
 # bitcoin core #
 BITCOIN_CORE_H = \
   storage/addrman.h \
+  addressindex.h \
+  spentindex.h \
+  timestampindex.h \
   structs/alert.h \
   utils/allocators.h \
   structs/amount.h \
