@@ -33,7 +33,7 @@ static const int64_t nMinDbCache = 4;
 class CCoinsViewDB : public CCoinsView
 {
 protected:
-    CLevelDBWrapper db;
+    CDBWrapper db;
 public:
     CCoinsViewDB(size_t nCacheSize, bool fMemory = false, bool fWipe = false);
 
@@ -45,7 +45,7 @@ public:
 };
 
 /** Access to the block database (blocks/index/) */
-class CBlockTreeDB : public CLevelDBWrapper
+class CBlockTreeDB : public CDBWrapper
 {
 public:
     CBlockTreeDB(size_t nCacheSize, bool fMemory = false, bool fWipe = false, bool compression = true, int maxOpenFiles = 1000);

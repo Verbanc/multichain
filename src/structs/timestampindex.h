@@ -11,15 +11,15 @@
 struct CTimestampIndexIteratorKey {
     unsigned int timestamp;
 
-    size_t GetSerializeSize() const {
+    size_t GetSerializeSize(int nType, int nVersion) const {
         return 4;
     }
     template<typename Stream>
-    void Serialize(Stream& s) const {
+    void Serialize(Stream& s, int nType, int nVersion) const {
         ser_writedata32be(s, timestamp);
     }
     template<typename Stream>
-    void Unserialize(Stream& s) {
+    void Unserialize(Stream& s, int nType, int nVersion) {
         timestamp = ser_readdata32be(s);
     }
 
@@ -40,18 +40,18 @@ struct CTimestampIndexKey {
     unsigned int timestamp;
     uint256 blockHash;
 
-    size_t GetSerializeSize() const {
+    size_t GetSerializeSize(int nType, int nVersion) const {
         return 36;
     }
     template<typename Stream>
-    void Serialize(Stream& s) const {
+    void Serialize(Stream& s, int nType, int nVersion) const {
         ser_writedata32be(s, timestamp);
-        blockHash.Serialize(s);
+        blockHash.Serialize(s, nType, nVersion);
     }
     template<typename Stream>
-    void Unserialize(Stream& s) {
+    void Unserialize(Stream& s, int nType, int nVersion) {
         timestamp = ser_readdata32be(s);
-        blockHash.Unserialize(s);
+        blockHash.Unserialize(s, nType, nVersion);
     }
 
     CTimestampIndexKey(unsigned int time, uint256 hash) {
@@ -72,18 +72,18 @@ struct CTimestampIndexKey {
 struct CTimestampBlockIndexKey {
     uint256 blockHash;
 
-    size_t GetSerializeSize() const {
+    size_t GetSerializeSize(int nType, int nVersion) const {
         return 32;
     }
 
     template<typename Stream>
-    void Serialize(Stream& s) const {
-        blockHash.Serialize(s);
+    void Serialize(Stream& s, int nType, int nVersion) const {
+        blockHash.Serialize(s, nType, nVersion);
     }
 
     template<typename Stream>
-    void Unserialize(Stream& s) {
-        blockHash.Unserialize(s);
+    void Unserialize(Stream& s, int nType, int nVersion) {
+        blockHash.Unserialize(s, nType, nVersion);
     }
 
     CTimestampBlockIndexKey(uint256 hash) {
@@ -101,17 +101,17 @@ struct CTimestampBlockIndexKey {
 
 struct CTimestampBlockIndexValue {
     unsigned int ltimestamp;
-    size_t GetSerializeSize() const {
+    size_t GetSerializeSize(int nType, int nVersion) const {
         return 4;
     }
 
     template<typename Stream>
-    void Serialize(Stream& s) const {
+    void Serialize(Stream& s, int nType, int nVersion) const {
         ser_writedata32be(s, ltimestamp);
     }
 
     template<typename Stream>
-    void Unserialize(Stream& s) {
+    void Unserialize(Stream& s, int nType, int nVersion) {
         ltimestamp = ser_readdata32be(s);
     }
 
