@@ -27,7 +27,7 @@ Install dependencies
 
     sudo apt-get update
     sudo apt-get install build-essential libtool autotools-dev automake pkg-config libssl-dev libevent-dev bsdmainutils
-    sudo apt-get install libboost-all-dev
+    sudo apt-get install libboost-all-dev libzmq3-dev libzmq3
     sudo apt-get install git
     sudo apt-get install software-properties-common
     sudo add-apt-repository ppa:bitcoin/bitcoin
@@ -58,7 +58,7 @@ Install dependencies
     sudo apt-get update
     sudo apt-get install build-essential libtool autotools-dev automake pkg-config libssl-dev libevent-dev bsdmainutils
     sudo apt-get install g++-mingw-w64-i686 mingw-w64-i686-dev g++-mingw-w64-x86-64 mingw-w64-x86-64-dev curl
-    sudo apt-get install libboost-system-dev libboost-filesystem-dev libboost-chrono-dev libboost-program-options-dev libboost-test-dev libboost-thread-dev
+    sudo apt-get install libboost-system-dev libboost-filesystem-dev libboost-chrono-dev libboost-program-options-dev libboost-test-dev libboost-thread-dev libzmq3-dev libzmq3
     sudo apt-get install git
     sudo add-apt-repository ppa:bitcoin/bitcoin
     sudo apt-get update
